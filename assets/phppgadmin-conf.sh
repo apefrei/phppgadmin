@@ -1,5 +1,4 @@
-#!/usr/bin/env sh
-set -eu
+#!/bin/sh
 
 PHP_PG_ADMIN_SERVER_DESC=${PHP_PG_ADMIN_SERVER_DESC:-PostgreSQL}
 PHP_PG_ADMIN_SERVER_HOST=${PHP_PG_ADMIN_SERVER_HOST:-}

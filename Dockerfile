@@ -1,32 +1,56 @@
-FROM richarvey/nginx-php-fpm:latest
+FROM ubuntu
 
-LABEL maintainer="Raptus AG" \
-    org.label-schema.name="phppgadmin" \
-    org.label-schema.vendor="raptusag" \
-    org.label-schema.description="phpPgAdmin Docker image, phpPgAdmin is a web-based administration tool for PostgreSQL." \
-    org.label-schema.vcs-url="https://github.com/Raptus/raptus.cnt.mgmt.pgadmin"
+# INIT
+ENV DEBIAN_FRONTEND noninteractive
+ENV PHP_VERSION 8.1
 
+# TIME
+ENV TZ=Europe/Zurich
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# BASIC PACKAGES
+RUN apt-get update
+RUN apt-get install -y nginx php php-fpm php-intl php-mysql php-xdebug php-pgsql \
+                       postgresql curl gunicorn
+RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
+
+# LANG
+RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
+	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ENV LANG en_US.utf8
+
+# NGINX config
+
+# PHP Config
+RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/${PHP_VERSION}/fpm/php-fpm.conf
+
+#Other
 ENV RAPTUS_WEBROOT_DIR=/var/www/html
 ENV RAPTUS_DATA_DIR=/data
-ENV RAPTUS_ETC_DIR=/opt/raptus
+ENV RAPTUS_OPT_DIR=/opt/raptus
 ENV RAPTUS_LOG_DIR=/var/log
 
-ADD ./assets ${RAPTUS_ETC_DIR}
-COPY sshd_config /etc/ssh/
+COPY assets ${RAPTUS_OPT_DIR}/assets
 COPY entrypoint.sh ./
 
-# Start and enable SSH
-RUN apk add openssh \
+RUN ls -la ${RAPTUS_OPT_DIR}/assets/install.sh
+
+RUN chmod -R 755 ${RAPTUS_OPT_DIR}
+##RUN cp -ar ${RAPTUS_OPT_DIR}/etc/* /etc
+RUN rm -rf /var/cache/apk/* ${RAPTUS_OPT_DIR}/etc ${RAPTUS_OPT_DIR}/buildtime
+
+# Start and enable SSH for Azure
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends dialog \
+    && apt-get install -y --no-install-recommends openssh-server \
     && echo "root:Docker!" | chpasswd \
-    && chmod +x ./entrypoint.sh \
-    && cd /etc/ssh/ \
-    && ssh-keygen -A
+    && chmod u+x ./entrypoint.sh
+COPY ${RAPTUS_OPT_DIR}/assets/sshd_config /etc/ssh/
 
-RUN apk --no-cache --update add postgresql
-RUN chmod -R ugo+x ${RAPTUS_ETC_DIR}
-RUN ${RAPTUS_ETC_DIR}/buildtime/install.sh
-#RUN cp -ar ${RAPTUS_ETC_DIR}/etc/* /etc
-RUN rm -rf /var/cache/apk/* ${RAPTUS_ETC_DIR}/etc ${RAPTUS_ETC_DIR}/buildtime
+# Define default command.
+CMD service php${PHP_VERSION}-fpm start && nginx
 
-EXPOSE 8000 2222
+# Expose ports.
+EXPOSE 80 443 8000 2222
+
 ENTRYPOINT [ "./entrypoint.sh" ]
