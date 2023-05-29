@@ -13,7 +13,7 @@ ENV RAPTUS_LOG_DIR=/var/log
 
 ADD ./assets ${RAPTUS_ETC_DIR}
 
-RUN apk --no-cache --update add pgsql postgresql
+RUN apk --no-cache --update add postgresql
 RUN ${RAPTUS_ETC_DIR}/buildtime/install.sh
 RUN cp -ar ${RAPTUS_ETC_DIR}/etc/* /etc
 RUN rm -rf /var/cache/apk/* ${RAPTUS_ETC_DIR}/etc ${RAPTUS_ETC_DIR}/buildtime
