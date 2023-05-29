@@ -30,10 +30,10 @@ ENV RAPTUS_DATA_DIR=/data
 ENV RAPTUS_OPT_DIR=/opt/raptus
 ENV RAPTUS_LOG_DIR=/var/log
 
-COPY assets ${RAPTUS_OPT_DIR}/assets
+COPY ./assets/. ${RAPTUS_OPT_DIR}/assets/
 COPY entrypoint.sh ./
 
-RUN chmod -R 755 ${RAPTUS_OPT_DIR}
+RUN chmod -R og-rwx ${RAPTUS_OPT_DIR}
 RUN rm -rf /var/cache/apk/* ${RAPTUS_OPT_DIR}/etc ${RAPTUS_OPT_DIR}/buildtime
 
 # Start and enable SSH for Azure
@@ -42,7 +42,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends openssh-server \
     && echo "root:Docker!" | chpasswd \
     && chmod u+x ./entrypoint.sh
-COPY ${RAPTUS_OPT_DIR}/assets/sshd_config /etc/ssh/
+
+COPY sshd_config /etc/ssh
+RUN ls -la ${RAPTUS_OPT_DIR}/assets
 
 # Define default command.
 CMD service php${PHP_VERSION}-fpm start && nginx
