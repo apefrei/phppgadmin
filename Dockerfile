@@ -33,8 +33,6 @@ ENV RAPTUS_LOG_DIR=/var/log
 COPY assets ${RAPTUS_OPT_DIR}/assets
 COPY entrypoint.sh ./
 
-RUN ls -la ${RAPTUS_OPT_DIR}/assets/install.sh
-
 RUN chmod -R 755 ${RAPTUS_OPT_DIR}
 RUN rm -rf /var/cache/apk/* ${RAPTUS_OPT_DIR}/etc ${RAPTUS_OPT_DIR}/buildtime
 
