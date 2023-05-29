@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://swclecomrvcreg.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_c21dfc2fe1f64594963e79b053da09d8 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_58b4b5a134664ac8934766d2550a0732 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_faa95490bcff4e67a6499943dd6c2347 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_42572cecbe6a4efd97d5987a1e845b83 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: swclecomrvcreg.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_c21dfc2fe1f64594963e79b053da09d8 }}/mrvpgadmin:${{ github.sha }}
+        tags: swclecomrvcreg.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_faa95490bcff4e67a6499943dd6c2347 }}/swclecomrvcreg/mrvpgadmin:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'swcleco-mrvpgadmin'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_c456dc63f30e4bb894cd63f2c39bf78d }}
-        images: 'swclecomrvcreg.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_c21dfc2fe1f64594963e79b053da09d8 }}/mrvpgadmin:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_a1a982317f02463ba5f1c4125f24b7bc }}
+        images: 'swclecomrvcreg.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_faa95490bcff4e67a6499943dd6c2347 }}/swclecomrvcreg/mrvpgadmin:${{ github.sha }}'
