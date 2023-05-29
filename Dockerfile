@@ -12,9 +12,21 @@ ENV RAPTUS_ETC_DIR=/opt/raptus
 ENV RAPTUS_LOG_DIR=/var/log
 
 ADD ./assets ${RAPTUS_ETC_DIR}
+COPY sshd_config /etc/ssh/
+COPY entrypoint.sh ./
+
+# Start and enable SSH
+RUN apk add openssh \
+    && echo "root:Docker!" | chpasswd \
+    && chmod +x ./entrypoint.sh \
+    && cd /etc/ssh/ \
+    && ssh-keygen -A
 
 RUN apk --no-cache --update add postgresql
 RUN chmod -R ugo+x ${RAPTUS_ETC_DIR}
 RUN ${RAPTUS_ETC_DIR}/buildtime/install.sh
 #RUN cp -ar ${RAPTUS_ETC_DIR}/etc/* /etc
 RUN rm -rf /var/cache/apk/* ${RAPTUS_ETC_DIR}/etc ${RAPTUS_ETC_DIR}/buildtime
+
+EXPOSE 8000 2222
+ENTRYPOINT [ "./entrypoint.sh" ]
