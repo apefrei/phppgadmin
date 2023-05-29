@@ -8,12 +8,13 @@ LABEL maintainer="Raptus AG" \
 
 ENV RAPTUS_WEBROOT_DIR=/var/www/html
 ENV RAPTUS_DATA_DIR=/data
-ENV RAPTUS_ETC_DIR=/etc/raptus
+ENV RAPTUS_ETC_DIR=/opt/raptus
 ENV RAPTUS_LOG_DIR=/var/log
 
 ADD ./assets ${RAPTUS_ETC_DIR}
 
 RUN apk --no-cache --update add postgresql
+RUN chmod -R ugo+x ${RAPTUS_ETC_DIR}
 RUN ${RAPTUS_ETC_DIR}/buildtime/install.sh
 RUN cp -ar ${RAPTUS_ETC_DIR}/etc/* /etc
 RUN rm -rf /var/cache/apk/* ${RAPTUS_ETC_DIR}/etc ${RAPTUS_ETC_DIR}/buildtime
