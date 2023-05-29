@@ -13,7 +13,7 @@ ENV RAPTUS_WEBROOT_DIR=/var/www/html \
 
 ADD ./assets ${RAPTUS_ETC_DIR}
 
-RUN apk --no-cache add php8-pgsql postgresql \
-    && ${RAPTUS_ETC_DIR}/buildtime/install.sh \
-    && cp -ar ${RAPTUS_ETC_DIR}/etc/* /etc \
-    && rm -rf /var/cache/apk/* ${RAPTUS_ETC_DIR}/etc ${RAPTUS_ETC_DIR}/buildtime
+RUN apk --no-cache add php8-pgsql postgresql
+RUN ${RAPTUS_ETC_DIR}/buildtime/install.sh
+RUN cp -ar ${RAPTUS_ETC_DIR}/etc/* /etc
+RUN rm -rf /var/cache/apk/* ${RAPTUS_ETC_DIR}/etc ${RAPTUS_ETC_DIR}/buildtime
