@@ -1,15 +1,19 @@
-FROM dockage/alpine-nginx-php-fpm:latest
+FROM richarvey/nginx-php-fpm:latest
 
-LABEL maintainer="Mohammad Abdolirad <m.abdolirad@gmail.com>" \
+LABEL maintainer="Raptus AG" \
     org.label-schema.name="phppgadmin" \
-    org.label-schema.vendor="Dockage" \
+    org.label-schema.vendor="raptusag" \
     org.label-schema.description="phpPgAdmin Docker image, phpPgAdmin is a web-based administration tool for PostgreSQL." \
-    org.label-schema.vcs-url="https://github.com/dockage/phppgadmin" \
-    org.label-schema.license="MIT"
+    org.label-schema.vcs-url="https://github.com/Raptus/raptus.cnt.mgmt.pgadmin"
 
-ADD ./assets ${DOCKAGE_ETC_DIR}
+ENV RAPTUS_WEBROOT_DIR=/var/www \
+    RAPTUS_DATA_DIR=/data \
+    RAPTUS_ETC_DIR=/etc/raptus \
+    RAPTUS_LOG_DIR=/var/log
 
-RUN apk --no-cache --update add php5-pgsql postgresql \
-    && ${DOCKAGE_ETC_DIR}/buildtime/install \
-    && cp -ar ${DOCKAGE_ETC_DIR}/etc/* /etc \
-    && rm -rf /var/cache/apk/* ${DOCKAGE_ETC_DIR}/etc ${DOCKAGE_ETC_DIR}/buildtime
+ADD ./assets ${RAPTUS_ETC_DIR}
+
+RUN apk --no-cache --update add php8-pgsql postgresql \
+    && ${RAPTUS_ETC_DIR}/buildtime/install \
+    && cp -ar ${RAPTUS_ETC_DIR}/etc/* /etc \
+    && rm -rf /var/cache/apk/* ${RAPTUS_ETC_DIR}/etc ${RAPTUS_ETC_DIR}/buildtime

@@ -1,61 +1,18 @@
-# phpPgAdmin [![Docker Pulls](https://img.shields.io/docker/pulls/dockage/phppgadmin.svg?style=flat)](https://hub.docker.com/r/dockage/phppgadmin/) [![Docker Stars](https://img.shields.io/docker/stars/dockage/phppgadmin.svg?style=flat)](https://hub.docker.com/r/dockage/phppgadmin/) [![MicroBadger](https://images.microbadger.com/badges/image/dockage/phppgadmin.svg)](https://microbadger.com/images/dockage/phppgadmin) [![Docker Automated build](https://img.shields.io/docker/automated/dockage/phppgadmin.svg?style=flat)](https://hub.docker.com/r/dockage/phppgadmin/)
-[phpPgAdmin](https://github.com/phppgadmin/phppgadmin) is a web-based administration tool for [PostgreSQL](https://www.postgresql.org). It is perfect for PostgreSQL DBAs, newbies, and hosting services.
+# phpPgAdmin
+[phpPgAdmin](https://github.com/phppgadmin/phppgadmin) is a web-based administration tool for [PostgreSQL](https://www.postgresql.org).
 
-## Contributing
-
-If you find this image useful here's how you can help:
-
-- Send a pull request with your awesome features and bug fixes
-- Help users resolve their [issues](../../issues?q=is%3Aopen+is%3Aissue).
-
-## Issues
-
-Before reporting your issue please try updating Docker to the latest version and check if it resolves the issue. Refer to the Docker [installation guide](https://docs.docker.com/installation) for instructions.
-
-SELinux users should try disabling SELinux using the command `setenforce 0` to see if it resolves the issue.
-
-If the above recommendations do not help then [report your issue](../../issues/new) along with the following information:
-
-- Output of the `docker vers6` and `docker info` commands
-- The `docker run` command or `docker-compose.yml` used to start the image. Mask out the sensitive bits.
-- Please state if you are using [Boot2Docker](http://www.boot2docker.io), [VirtualBox](https://www.virtualbox.org), etc.
+# Important
+The content of this repo ist for testing purposes only.
 
 # Getting started
 
-## Installation
-
-Pull the image from the docker index. This is the recommended method of installation as it is easier to update image. These builds are performed by the **Docker Trusted Build** service.
+## Build locally
 
 ```bash
-docker pull dockage/phppgadmin:latest
-```
-
-Alternately you can build the image locally.
-
-```bash
-git clone https://github.com/dockage/phppgadmin.git
+git clone https://github.com/Raptus/raptus.cnt.mgmt.pgadmin.git
 cd phppgadmin
 docker build --tag="$USER/phppgadmin" .
 ```
-
-
-## Quick Start
-
-The quickest way to get started is using [docker-compose](https://docs.docker.com/compose/).
-
-```bash
-wget https://raw.githubusercontent.com/dockage/phppgadmin/master/docker-compose.yml
-docker-compose up
-```
-
-Alternately, you can manually launch the `phppgadmin` container.
-
-```bash
-docker run --name='phppgadmin' -d \
-  --publish=80:80 \
-dockage/phppgadmin:latest
-```
-
 
 ### Available Configuration Parameters
 
@@ -89,33 +46,30 @@ Below is the complete list of available options that can be used to customize yo
 | `PHP_PG_ADMIN_HELP_BASE` | Base URL for PostgreSQL documentation. '%s', if present, will be replaced with the PostgreSQL version (e.g. 8.4). Defaults to `http://www.postgresql.org/docs/%s/interactive/`. |
 | `PHP_PG_ADMIN_AJAX_REFRESH` | Configuration for ajax scripts. Time in seconds. If set to `0`, refreshing data using ajax will be disabled (locks and activity pages). Defaults to `3`. |
 
-
-## Upgrading
-
-To upgrade to newer `phppgadmin` releases, simply follow this 3 step upgrade procedure.
-
-- **Step 1**: Update the docker image.
+## ENV Example
 
 ```bash
-docker pull dockage/phppgadmin:latest
+PHP_PG_ADMIN_SERVER_DESC=PostgreSQL
+PHP_PG_ADMIN_SERVER_HOST=
+PHP_PG_ADMIN_SERVER_PORT=5432
+PHP_PG_ADMIN_SERVER_SSL_MODE=allow
+PHP_PG_ADMIN_SERVER_DEFAULT_DB=template1
+PHP_PG_ADMIN_SERVER_PG_DUMP_PATH=/usr/bin/pg_dump
+PHP_PG_ADMIN_SERVER_PG_DUMPALL_PATH=/usr/bin/pg_dumpall
+PHP_PG_ADMIN_DEFAULT_LANG=auto
+PHP_PG_ADMIN_AUTO_COMPLETE=default on
+PHP_PG_ADMIN_EXTRA_LOGIN_SECURITY=false
+PHP_PG_ADMIN_OWNED_ONLY=false
+PHP_PG_ADMIN_SHOW_COMMENTS=true
+PHP_PG_ADMIN_SHOW_ADVANCED=false
+PHP_PG_ADMIN_SHOW_SYSTEM=false
+PHP_PG_ADMIN_MIN_PASSWORD_LENGTH=1
+PHP_PG_ADMIN_LEFT_WIDTH=200
+PHP_PG_ADMIN_THEME=default
+PHP_PG_ADMIN_SHOW_OIDS=false
+PHP_PG_ADMIN_MAX_ROWS=30
+PHP_PG_ADMIN_MAX_CHARS=50
+PHP_PG_ADMIN_USE_XHTML_STRICT=false
+PHP_PG_ADMIN_HELP_BASE=http://www.postgresql.org/docs/%s/interactive/
+PHP_PG_ADMIN_AJAX_REFRESH=3
 ```
-
-- **Step 2**: Stop and remove the currently running image
-
-```bash
-docker stop phppgadmin
-docker rm phppgadmin
-```
-
-- **Step 3**: Start the image
-
-```bash
-docker run --name=phppgadmin -d [OPTIONS] dockage/phppgadmin:latest
-```
-
-## Quick reference
-* Where to get help: [website](https://dockage.dev/), [documentation](https://dockage.dev/docs/)
-* GitHub repo: [dockage/phppgadmin](https://github.com/dockage/phppgadmin)
-* Where to file issues: [GitHub issues](https://github.com/dockage/phppgadmin/issues)
-* Maintained by: The Dockage team (info at dockage.dev)
-* License(s) - [license](https://github.com/dockage/phppgadmin/blob/main/LICENSE), check 3rd party documentation for license information

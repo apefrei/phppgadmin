@@ -35,16 +35,6 @@ $conf['servers'][0]['defaultdb'] = '{{PHP_PG_ADMIN_SERVER_DEFAULT_DB}}';
 $conf['servers'][0]['pg_dump_path'] = '{{PHP_PG_ADMIN_SERVER_PG_DUMP_PATH}}';
 $conf['servers'][0]['pg_dumpall_path'] = '{{PHP_PG_ADMIN_SERVER_PG_DUMPALL_PATH}}';
 
-// Example for a second server (PostgreSQL for Windows)
-//$conf['servers'][1]['desc'] = 'Test Server';
-//$conf['servers'][1]['host'] = '127.0.0.1';
-//$conf['servers'][1]['port'] = 5432;
-//$conf['servers'][1]['sslmode'] = 'allow';
-//$conf['servers'][1]['defaultdb'] = 'template1';
-//$conf['servers'][1]['pg_dump_path'] = 'C:\\Program Files\\PostgreSQL\\8.0\\bin\\pg_dump.exe';
-//$conf['servers'][1]['pg_dumpall_path'] = 'C:\\Program Files\\PostgreSQL\\8.0\\bin\\pg_dumpall.exe';
-
-
 /* Groups definition */
 /* Groups allow administrators to logicaly group servers together under
  * group nodes in the left browser tree
